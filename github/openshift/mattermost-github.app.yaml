@@ -1,0 +1,133 @@
+kind: Template
+apiVersion: v1
+metadata: 
+  name: mattermost-github-integration
+  creationTimestamp: null
+  annotations:
+    openshift.io/display-name: "Mattermost github integration"
+    description: "Template to provision a Mattermost github integration instance.\nRef:https://github.com/syamgk/mattermost-github-integration/wiki/Howto"
+objects: 
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata: 
+    creationTimestamp: null
+    generation: 1
+    labels:
+      service: mattermost-github-integration
+    name: mattermost-github-integration
+  spec:
+    replicas: 1
+    selector:
+      service: mattermost-github-integration
+    strategy:
+      resources:
+        requests:
+          cpu: 20m
+          memory: 50Mi
+        limits:
+          cpu: 200m
+          memory: 500Mi
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          service: mattermost-github-integration
+      spec: 
+        containers: 
+        - name: mattermost-github-integration
+          image: registry.devshift.net/mattermost/mattermost-github-integration:${IMAGE_TAG}
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 5000
+            protocol: TCP
+          env: 
+          - name: "REPO_NAMES"
+            valueFrom:
+              secretKeyRef:
+                name: mattermost-github-config
+                key: repos
+          - name: "HOOK_URLS"
+            valueFrom:
+              secretKeyRef:
+                name: mattermost-github-config
+                key: mattermosturls
+          - name: "CHANNEL_NAMES"
+            valueFrom:
+              secretKeyRef:
+                name: mattermost-github-config
+                key: channels
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+              scheme: HTTP
+            initialDelaySeconds: 15
+            timeoutSeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+              scheme: HTTP
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+    - type: ConfigChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      service: mattermost-github-integration 
+    name: mattermost-github-integration
+  spec: 
+    ports: 
+    - name: 5000-tcp
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
+    selector: 
+      service: mattermost-github-integration
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    labels:
+      service: mattermost-github-integration
+    name: mattermost-github-integration
+  spec:
+    host: ''
+    port:
+      targetPort: 5000-tcp
+    to:
+      kind: Service
+      name: mattermost-github-integration
+      weight: 100
+    wildcardPolicy: None
+  status: {}
+parameters:
+- name: IMAGE_TAG

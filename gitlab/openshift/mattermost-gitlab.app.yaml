@@ -1,0 +1,123 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: mattermost-gitlab-integration
+  creationTimestamp: null
+  annotations:
+    openshift.io/display-name: "Mattermost gitlab integration"
+    description: "Template to provision a Mattermost gitlab integration instance."
+objects: 
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    creationTimestamp: null
+    generation: 1
+    labels:
+      service: mattermost-gitlab-integration
+    name: mattermost-gitlab-integration
+  spec:
+    replicas: 1
+    selector:
+      service: mattermost-gitlab-integration
+    strategy:
+      resources:
+        requests:
+          cpu: 20m
+          memory: 50Mi
+        limits:
+          cpu: 200m
+          memory: 500Mi
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          service: mattermost-gitlab-integration
+      spec:
+        containers:
+        - name: mattermost-gitlab-integration
+          image: registry.devshift.net/mattermost/mattermost-gitlab-integration:${IMAGE_TAG}
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 5000
+            protocol: TCP
+          env:
+          - name: "MATTERMOST_WEBHOOK_URL"
+            valueFrom:
+              secretKeyRef:
+                name: mattermost-gitlab-integration
+                key: mmhookurl
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+              scheme: HTTP
+            initialDelaySeconds: 15
+            timeoutSeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+              scheme: HTTP
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+    - type: ConfigChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      service: mattermost-gitlab-integration
+    name: mattermost-gitlab-integration
+  spec:
+    ports:
+    - name: 5000-tcp
+      port: 5000
+      protocol: TCP
+      targetPort: 5000
+    selector:
+      service: mattermost-gitlab-integration
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1 
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    labels:
+      service: mattermost-gitlab-integration
+    name: mattermost-gitlab-integration
+  spec:
+    host: ''
+    port:
+      targetPort: 5000-tcp
+    to:
+      kind: Service
+      name: mattermost-gitlab-integration
+      weight: 100
+    wildcardPolicy: None
+  status: {}
+parameters:
+- name: IMAGE_TAG
