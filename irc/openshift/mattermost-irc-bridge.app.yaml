@@ -1,0 +1,86 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: mattermost-irc-integration
+  creationTimestamp: null
+  annotations:
+    openshift.io/display-name: "Mattermost irc integration"
+    description: "Template to provision a Mattermost irc integration instance."
+objects:
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    creationTimestamp: null
+    labels:
+      service: mattermost-irc-integration
+    name: "mattermost-irc-integration"
+  spec:
+    replicas: 1
+    selector:
+      service: mattermost-irc-integration
+    strategy:
+      resources:
+        requests:
+          cpu: 20m
+          memory: 50Mi
+        limits:
+          cpu: 200m
+          memory: 500Mi
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          service: "mattermost-irc-integration"
+      spec:
+        containers:
+        - name: mattermost-irc-integration
+          image: registry.devshift.net/mattermost/mattermost-irc-integration:${IMAGE_TAG}
+          imagePullPolicy: Always
+          env:
+          - name: "IRC_NICK"
+            valueFrom:
+              secretKeyRef:
+                name: mattermost-irc-config
+                key: ircnick
+          - name: "MM_SERVER_NAME"
+            valueFrom:
+              secretKeyRef:
+                name: mattermost-irc-config
+                key: mattermostservername
+          - name: "MM_TEAM_NAME"
+            valueFrom:
+              secretKeyRef:
+                name: mattermost-irc-config
+                key: mattermostteamname
+          - name: "MM_LOGIN"
+            valueFrom:
+              secretKeyRef:
+                name: mattermost-irc-config
+                key: mattermostlogin
+          - name: "MM_PASS"
+            valueFrom:
+              secretKeyRef:
+                name: mattermost-irc-config
+                key: mattermostpass
+          - name: "IRC_CHANNEL_NAMES"
+            valueFrom:
+              secretKeyRef:
+                name: mattermost-irc-config
+                key: ircchannel
+          - name: "MM_CHANNEL_NAMES"
+            valueFrom:
+              secretKeyRef:
+                name: mattermost-irc-config
+                key: mattermostchannel
+  test: false
+  triggers:
+    - type: ConfigChange
+parameters:
+- name: IMAGE_TAG

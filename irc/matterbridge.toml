@@ -1,0 +1,17 @@
+[irc]
+    [irc.freenode]
+    Server="irc.freenode.net:6667"
+    Nick="IRC_NICK"
+    PrefixMessagesWithNick=true
+    ShowJoinPart=false
+    RemoteNickFormat="<{NICK}> "
+
+[mattermost]
+    [mattermost.work]   
+    Server="MM_SERVER_NAME"
+    Team="MM_TEAM_NAME"
+    Login="MM_LOGIN"
+    Password="MM_PASS"
+    PrefixMessagesWithNick=true
+    ShowJoinPart=false
+    RemoteNickFormat="[{PROTOCOL}] <{NICK}> "
