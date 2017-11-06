@@ -42,7 +42,7 @@ objects:
       spec:
         containers:
         - name: mattermost-rss-integration
-          image: registry.devshift.net/mattermost/mattermost-rss-integration:${IMAGE_TAG}
+          image: registry.centos.org/mattermost/mattermost-rss-integration:${IMAGE_TAG}
           imagePullPolicy: Always
           env:
           - name: "MATTERMOST_HOOK_URL"
