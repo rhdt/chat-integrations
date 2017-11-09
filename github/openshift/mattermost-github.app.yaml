@@ -131,3 +131,4 @@ objects:
   status: {}
 parameters:
 - name: IMAGE_TAG
+  value: 92394f2
