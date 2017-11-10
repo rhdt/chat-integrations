@@ -71,4 +71,4 @@ objects:
     - type: ConfigChange
 parameters:
 - name: IMAGE_TAG
-  value: 8e189eb
+  value: "8e189eb"
