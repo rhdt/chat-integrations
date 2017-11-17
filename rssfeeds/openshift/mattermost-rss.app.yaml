@@ -42,7 +42,7 @@ objects:
       spec:
         containers:
         - name: mattermost-rss-integration
-          image: registry.centos.org/mattermost/mattermost-rss-integration:${IMAGE_TAG}
+          image: registry.centos.org/mattermost/mattermost-rss-integration:${IMAGE_TAG_VERSION}
           imagePullPolicy: Always
           env:
           - name: "MATTERMOST_HOOK_URL"
@@ -70,5 +70,6 @@ objects:
   triggers:
     - type: ConfigChange
 parameters:
-- name: IMAGE_TAG
+- name: IMAGE_TAG_VERSION
   value: "8e189eb"
+- name: IMAGE_TAG

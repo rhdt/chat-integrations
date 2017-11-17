@@ -42,7 +42,7 @@ objects:
       spec:
         containers:
         - name: mattermost-gitlab-integration
-          image: registry.centos.org/mattermost/mattermost-gitlab-integration:${IMAGE_TAG}
+          image: registry.centos.org/mattermost/mattermost-gitlab-integration:${IMAGE_TAG_VERSION}
           imagePullPolicy: Always
           ports:
           - containerPort: 5000
@@ -120,5 +120,6 @@ objects:
     wildcardPolicy: None
   status: {}
 parameters:
-- name: IMAGE_TAG
+- name: IMAGE_TAG_VERSION
   value: "4a61a48"
+- name: IMAGE_TAG

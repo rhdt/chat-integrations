@@ -42,7 +42,7 @@ objects:
       spec: 
         containers: 
         - name: mattermost-github-integration
-          image: registry.centos.org/mattermost/mattermost-github-integration:${IMAGE_TAG}
+          image: registry.centos.org/mattermost/mattermost-github-integration:${IMAGE_TAG_VERSION}
           imagePullPolicy: Always
           ports:
           - containerPort: 5000
@@ -130,5 +130,6 @@ objects:
     wildcardPolicy: None
   status: {}
 parameters:
-- name: IMAGE_TAG
+- name: IMAGE_TAG_VERSION
   value: "92394f2"
+- name: IMAGE_TAG
