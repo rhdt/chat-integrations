@@ -41,7 +41,7 @@ objects:
       spec:
         containers:
         - name: mattermost-irc-integration
-          image: registry.centos.org/mattermost/mattermost-irc-integration:${IMAGE_TAG_VERSION}
+          image: registry.centos.org/mattermost/matterbridge:${IMAGE_TAG_VERSION}
           imagePullPolicy: Always
           env:
           - name: "IRC_NICK"
