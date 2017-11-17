@@ -9,7 +9,7 @@ set -e
 export BUILD_TIMESTAMP=`date -u +%Y-%m-%dT%H:%M:%S`+00:00
 
 # Check the existence of image on registry.centos.org
-IMAGE="mattermost-irc-integration"
+IMAGE="matterbridge"
 REGISTRY="https://registry.centos.org"
 REPOSITORY="mattermost"
 TEMPLATE="openshift/mattermost-irc-bridge.app.yaml"
