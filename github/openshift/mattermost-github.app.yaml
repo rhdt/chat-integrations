@@ -66,20 +66,21 @@ objects:
           resources: {}
           terminationMessagePath: /dev/termination-log
           readinessProbe:
-            httpGet:
-              path: /
-              port: 5000
-              scheme: HTTP
+            exec:
+              command:
+              - cat
+              - /opt/config.py
             initialDelaySeconds: 15
-            timeoutSeconds: 10
+            timeoutSeconds: 5
             periodSeconds: 10
             successThreshold: 1
             failureThreshold: 3
+
           livenessProbe:
-            httpGet:
-              path: /
-              port: 5000
-              scheme: HTTP
+            exec:
+              command:
+              - cat
+              - /opt/config.py
             initialDelaySeconds: 15
             timeoutSeconds: 5
             periodSeconds: 10
