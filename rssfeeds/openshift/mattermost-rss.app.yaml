@@ -66,6 +66,8 @@ objects:
               secretKeyRef:
                 name: mattermost-rss-config
                 key: feedurl2
+          - name: RSS_SHOW_DESCR
+            value: 'False'
   test: false
   triggers:
     - type: ConfigChange
