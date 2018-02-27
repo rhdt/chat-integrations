@@ -53,6 +53,10 @@ objects:
               secretKeyRef:
                 name: mattermost-gitlab-integration
                 key: mmhookurl
+          - name: "MATTERMOST_ICON"
+            value: 'https://gitlab.com/assets/touch-icon-ipad-retina-8ebe416f5313483d9c1bc772b5bbe03ecad52a54eba443e5215a22caed2a16a2.png'
+          - name: "MATTERMOST_USERNAME"
+            value: 'Gitlab_notification'
           resources: {}
           terminationMessagePath: /dev/termination-log
           readinessProbe:
