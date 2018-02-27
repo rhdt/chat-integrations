@@ -61,7 +61,7 @@ objects:
               secretKeyRef:
                 name: mattermost-rss-config
                 key: feedurl1
-          - name: RSS_FEED_analystics
+          - name: RSS_FEED_analytics
             valueFrom:
               secretKeyRef:
                 name: mattermost-rss-config
