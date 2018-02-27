@@ -56,18 +56,29 @@ objects:
                 name: mattermost-rss-config
                 key: channel
           - name: "MATTERMOST_CMD_TOKEN"
-          - name: RSS_FEED_1
+          - name: RSS_FEED_openshiftio
             valueFrom:
               secretKeyRef:
                 name: mattermost-rss-config
                 key: feedurl1
-          - name: RSS_FEED_2
+          - name: RSS_FEED_analystics
             valueFrom:
               secretKeyRef:
                 name: mattermost-rss-config
                 key: feedurl2
+          - name: RSS_FEED_launchpad
+            valueFrom:
+              secretKeyRef:
+                name: mattermost-rss-config
+                key: feedurl3
           - name: RSS_SHOW_DESCR
             value: 'False'
+          - name: RSS_SILENT_MODE
+            value: 'False'
+          - name: RSS_SHOW_TITLE
+            value: 'False'
+          - name: RSS_DELAY_PULL
+            value: '10'
   test: false
   triggers:
     - type: ConfigChange
