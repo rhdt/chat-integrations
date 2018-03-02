@@ -79,10 +79,20 @@ objects:
               secretKeyRef:
                 name: mattermost-irc-config
                 key: mattermostchannel
+          - name: "NICKSERV_NICK"
+            valueFrom:
+              secretKeyRef:
+                name: mattermost-irc-config
+                key: ircnickserv_nick
+          - name: "NICKSERV_PASS"
+            valueFrom:
+              secretKeyRef:
+                name: mattermost-irc-config
+                key: ircnickserv_pass
   test: false
   triggers:
     - type: ConfigChange
 parameters:
 - name: IMAGE_TAG_VERSION
-  value: "1.7.1"
+  value: "1.8.0"
 - name: IMAGE_TAG
