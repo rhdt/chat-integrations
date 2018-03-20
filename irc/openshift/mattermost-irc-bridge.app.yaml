@@ -94,5 +94,5 @@ objects:
     - type: ConfigChange
 parameters:
 - name: IMAGE_TAG_VERSION
-  value: "1.8.0"
+  value: "1.9.0"
 - name: IMAGE_TAG
