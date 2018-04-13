@@ -1,0 +1,15 @@
+FROM registry.devshift.net/osio-prod/base/pcp:latest
+
+RUN mkdir -p /opt/matterbridge 
+
+COPY . /opt/matterbridge
+
+RUN chown -R 1001 /opt/matterbridge && \
+    chmod -R 777 /opt/matterbridge && \
+    chmod +x /opt/matterbridge/docker-entry.sh
+
+WORKDIR /opt/matterbridge
+
+USER 1001
+
+ENTRYPOINT ["/opt/matterbridge/docker-entry.sh"]
