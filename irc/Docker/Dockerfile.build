@@ -1,0 +1,9 @@
+FROM registry.centos.org/centos/centos:7
+
+RUN yum -y install golang git
+
+ENV GOPATH /tmp/
+
+RUN go get github.com/42wim/matterbridge && cd /tmp/src/github.com/42wim/matterbridge && \
+    git checkout tags/v1.9.0 && \
+    go build .
